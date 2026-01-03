@@ -20,7 +20,7 @@
     filter: brightness(95%);
     mix-blend-mode: multiply;
 
-    .dark & {
+    body.vscode-dark & {
       filter: brightness(140%);
       mix-blend-mode: lighten;
     }
@@ -36,7 +36,7 @@
     }
   }
 
-  .dark & {
+  body.vscode-dark & {
     &[data-active-state="on"] {
       .tiptap-button-highlight {
         &::after {

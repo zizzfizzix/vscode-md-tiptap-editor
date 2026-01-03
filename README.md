@@ -78,7 +78,7 @@ vscode-md-tiptap-editor/
 │       │   ├── mermaid.ts
 │       │   └── imageWithWebviewUri.ts
 │       └── styles/               # CSS styling
-│           └── vscode-theme.css
+│           └── _variables.scss
 ├── dist/                         # Build output
 ├── package.json                  # Extension manifest
 └── README.md

@@ -1,5 +1,4 @@
 /* Import VS Code theme variables */
-@import './styles/vscode-theme.css';
 @import './styles/_variables.scss';
 
 /* Reset and base styles */
