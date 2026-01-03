@@ -22,6 +22,12 @@ export default defineConfig({
         chunkFileNames: 'assets/[name].js',
         assetFileNames: 'assets/[name].[ext]',
         manualChunks: (id) => {
+          // Let @shikijs/langs be split into separate lazy-loaded chunks
+          // This prevents bundling ALL language grammars (~4MB) into vendor.js
+          if (id.includes('@shikijs/langs') || id.includes('shiki/dist/langs')) {
+            return undefined // Let Rollup handle dynamic import chunking
+          }
+          
           // Split heavy dependencies into separate chunks for lazy loading
           if (id.includes('node_modules/mermaid')) {
             return 'vendor-mermaid'
@@ -31,6 +37,10 @@ export default defineConfig({
           }
           if (id.includes('node_modules/shiki')) {
             return 'vendor-shiki'
+          }
+          // Split Tiptap packages into their own chunk (large editor library)
+          if (id.includes('node_modules/@tiptap') || id.includes('node_modules/tiptap')) {
+            return 'vendor-tiptap'
           }
           // Keep other node_modules together
           if (id.includes('node_modules')) {

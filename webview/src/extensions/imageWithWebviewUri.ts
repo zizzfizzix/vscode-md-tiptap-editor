@@ -1,6 +1,5 @@
 import Image from '@tiptap/extension-image'
-
-declare const acquireVsCodeApi: any
+import { vscodeApi } from '@/lib/vscode-api'
 
 export const ImageWithWebviewUri = Image.extend({
   addProseMirrorPlugins() {
@@ -31,8 +30,7 @@ export const ImageWithWebviewUri = Image.extend({
           if (!src.startsWith('vscode-webview-resource:') && 
               !src.startsWith('http') && 
               !src.startsWith('data:')) {
-            const vscode = acquireVsCodeApi()
-            vscode.postMessage({ type: 'resolveImagePath', path: src })
+            vscodeApi.postMessage({ type: 'resolveImagePath', path: src })
           }
           
           return src

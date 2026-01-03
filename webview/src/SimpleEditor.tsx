@@ -5,14 +5,12 @@ import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
-import { Image } from "@tiptap/extension-image"
 import { TaskItem, TaskList } from "@tiptap/extension-list"
 import { TextAlign } from "@tiptap/extension-text-align"
 import { Typography } from "@tiptap/extension-typography"
 import { Highlight } from "@tiptap/extension-highlight"
 import { Subscript } from "@tiptap/extension-subscript"
 import { Superscript } from "@tiptap/extension-superscript"
-import { Underline } from "@tiptap/extension-underline"
 import { Table, TableRow, TableHeader, TableCell } from "@tiptap/extension-table"
 import { Markdown, type MarkdownStorage } from "tiptap-markdown"
 
@@ -37,9 +35,8 @@ import { useIsBreakpoint } from "@/hooks/use-is-breakpoint"
 import { useWindowSize } from "@/hooks/use-window-size"
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
 
-// VS Code API
-declare const acquireVsCodeApi: any
-const vscode = acquireVsCodeApi()
+// VS Code API singleton
+import { vscodeApi as vscode } from "@/lib/vscode-api"
 
 export function SimpleEditor() {
   // Layout state (not editor-related, won't cause editor re-renders)
@@ -70,8 +67,8 @@ export function SimpleEditor() {
       MathInline,
       MathBlock,
       Mermaid,
-      ImageWithWebviewUri,
-      Markdown,
+      ImageWithWebviewUri, // Custom image extension (replaces standard Image)
+      Markdown, // Includes Underline by default
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Table.configure({
         resizable: true,
@@ -82,13 +79,15 @@ export function SimpleEditor() {
       TaskList,
       TaskItem.configure({ nested: true }),
       Highlight.configure({ multicolor: true }),
-      Image,
       Typography,
       Superscript,
       Subscript,
-      Underline,
     ],
     content: '',
+    onCreate: () => {
+      // Send ready signal to extension
+      vscode.postMessage({ type: 'ready' });
+    },
     onUpdate: ({ editor }) => {
       if (isUpdatingFromVscode) {
         return

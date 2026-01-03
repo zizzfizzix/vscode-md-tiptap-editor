@@ -65,6 +65,10 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
     // Handle messages from webview
     webviewPanel.webview.onDidReceiveMessage(async e => {
       switch (e.type) {
+        case 'ready':
+          // Send initial content now that webview is ready
+          updateWebview(true);
+          return;
         case 'update':
           // Store the content from webview before applying
           lastWebviewContent = e.content;
@@ -97,9 +101,6 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
     webviewPanel.onDidDispose(() => {
       changeDocumentSubscription.dispose();
     });
-
-    // Initial load - force send content to webview
-    updateWebview(true);
   }
 
   private updateTextDocument(document: vscode.TextDocument, content: string) {
@@ -122,6 +123,14 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
     const styleUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this.context.extensionUri, 'dist', 'webview', 'assets', 'main.css')
     );
+    
+    // Preload critical vendor bundles
+    const vendorUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this.context.extensionUri, 'dist', 'webview', 'assets', 'vendor.js')
+    );
+    const vendorTiptapUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this.context.extensionUri, 'dist', 'webview', 'assets', 'vendor-tiptap.js')
+    );
 
     // Use a nonce to whitelist which scripts can be run
     const nonce = getNonce();
@@ -133,6 +142,8 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src ${webview.cspSource}; font-src ${webview.cspSource}; img-src ${webview.cspSource} https: data:;">
         <link href="${styleUri}" rel="stylesheet">
+        <link rel="modulepreload" href="${vendorUri}" as="script" crossorigin>
+        <link rel="modulepreload" href="${vendorTiptapUri}" as="script" crossorigin>
         <title>Tiptap Markdown Editor</title>
       </head>
       <body>
