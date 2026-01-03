@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
 
 export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
   public static register(context: vscode.ExtensionContext): vscode.Disposable {
@@ -35,17 +34,28 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
     // Set HTML content
     webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview);
 
-    // Send initial content to webview
-    const updateWebview = () => {
+    // Track the last content received from webview to avoid unnecessary syncs
+    // This prevents cursor jumping on save or when content hasn't actually changed
+    let lastWebviewContent: string | null = null;
+
+    // Send content to webview
+    const updateWebview = (force: boolean = false) => {
+      const currentContent = document.getText();
+      
+      // Skip if content matches what the webview last sent us (unless forced)
+      if (!force && lastWebviewContent === currentContent) {
+        return;
+      }
+      
       webviewPanel.webview.postMessage({
         type: 'init',
-        content: document.getText(),
+        content: currentContent,
         documentUri: document.uri.toString(),
         workspaceUri: vscode.workspace.workspaceFolders?.[0]?.uri.toString(),
       });
     };
 
-    // Hook up event handlers
+    // Hook up event handlers - only sync external changes to webview
     const changeDocumentSubscription = vscode.workspace.onDidChangeTextDocument(e => {
       if (e.document.uri.toString() === document.uri.toString()) {
         updateWebview();
@@ -53,10 +63,12 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
     });
 
     // Handle messages from webview
-    webviewPanel.webview.onDidReceiveMessage(e => {
+    webviewPanel.webview.onDidReceiveMessage(async e => {
       switch (e.type) {
         case 'update':
-          this.updateTextDocument(document, e.content);
+          // Store the content from webview before applying
+          lastWebviewContent = e.content;
+          await this.updateTextDocument(document, e.content);
           return;
         case 'resolveImagePath':
           // Convert local file path to webview URI
@@ -86,7 +98,8 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
       changeDocumentSubscription.dispose();
     });
 
-    updateWebview();
+    // Initial load - force send content to webview
+    updateWebview(true);
   }
 
   private updateTextDocument(document: vscode.TextDocument, content: string) {
