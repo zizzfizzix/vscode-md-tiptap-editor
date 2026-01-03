@@ -1,0 +1,280 @@
+/* Import VS Code theme variables */
+@import './styles/vscode-theme.css';
+@import './styles/_variables.scss';
+
+/* Reset and base styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  color: var(--vscode-editor-foreground);
+  background-color: var(--vscode-editor-background);
+}
+
+/* Simple editor wrapper */
+.simple-editor-wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.simple-editor-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tiptap Editor Styles */
+.tiptap-editor {
+  padding: 20px 40px;
+  outline: none;
+  min-height: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  flex: 1;
+}
+
+.tiptap-editor h1 {
+  font-size: 2em;
+  font-weight: 600;
+  margin: 1em 0 0.5em;
+  line-height: 1.2;
+}
+
+.tiptap-editor h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 0.83em 0 0.5em;
+  line-height: 1.3;
+}
+
+.tiptap-editor h3 {
+  font-size: 1.17em;
+  font-weight: 600;
+  margin: 0.67em 0 0.5em;
+  line-height: 1.4;
+}
+
+.tiptap-editor h4 {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0.5em 0;
+}
+
+.tiptap-editor p {
+  margin: 0.5em 0;
+  line-height: 1.6;
+}
+
+.tiptap-editor code {
+  background-color: var(--vscode-textCodeBlock-background);
+  color: var(--vscode-textPreformat-foreground);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.9em;
+}
+
+.tiptap-editor pre {
+  background-color: var(--vscode-textCodeBlock-background);
+  color: var(--vscode-textPreformat-foreground);
+  padding: 0.75em 1em;
+  border-radius: 5px;
+  overflow: auto;
+  margin: 1em 0;
+}
+
+.tiptap-editor pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.tiptap-editor ul,
+.tiptap-editor ol {
+  padding-left: 2em;
+  margin: 0.5em 0;
+}
+
+.tiptap-editor li {
+  margin: 0.25em 0;
+}
+
+.tiptap-editor blockquote {
+  border-left: 3px solid var(--vscode-textBlockQuote-border);
+  background-color: var(--vscode-textBlockQuote-background);
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  font-style: italic;
+}
+
+.tiptap-editor hr {
+  border: none;
+  border-top: 1px solid var(--vscode-panel-border);
+  margin: 2em 0;
+}
+
+.tiptap-editor a {
+  color: var(--vscode-textLink-foreground);
+  text-decoration: underline;
+}
+
+.tiptap-editor a:hover {
+  color: var(--vscode-textLink-activeForeground);
+}
+
+.tiptap-editor strong {
+  font-weight: 600;
+}
+
+.tiptap-editor em {
+  font-style: italic;
+}
+
+.tiptap-editor u {
+  text-decoration: underline;
+}
+
+.tiptap-editor s {
+  text-decoration: line-through;
+}
+
+/* Highlight */
+.tiptap-editor mark {
+  background-color: var(--vscode-editor-findMatchHighlightBackground);
+  color: var(--vscode-editor-foreground);
+  padding: 0.1em 0.2em;
+  border-radius: 2px;
+}
+
+/* Superscript and Subscript */
+.tiptap-editor sup {
+  vertical-align: super;
+  font-size: 0.75em;
+}
+
+.tiptap-editor sub {
+  vertical-align: sub;
+  font-size: 0.75em;
+}
+
+/* Table Styles */
+.tiptap-editor table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+.tiptap-editor th,
+.tiptap-editor td {
+  border: 1px solid var(--vscode-panel-border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+  vertical-align: top;
+  position: relative;
+}
+
+.tiptap-editor th {
+  font-weight: 600;
+  background-color: var(--vscode-editor-selectionBackground);
+}
+
+/* Task List Styles */
+.tiptap-editor ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.tiptap-editor ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+}
+
+.tiptap-editor ul[data-type="taskList"] li > label {
+  flex: 0 0 auto;
+  margin-right: 0.5em;
+  user-select: none;
+}
+
+.tiptap-editor ul[data-type="taskList"] li > div {
+  flex: 1 1 auto;
+}
+
+.tiptap-editor ul[data-type="taskList"] input[type="checkbox"] {
+  cursor: pointer;
+}
+
+/* Image Styles */
+.tiptap-editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin: 1em 0;
+}
+
+.tiptap-editor img:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Focus styles */
+.tiptap-editor:focus {
+  outline: none;
+}
+
+/* Selection styles */
+.tiptap-editor .ProseMirror-selectednode {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: 2px;
+}
+
+/* Text Alignment */
+.tiptap-editor [style*="text-align: left"] {
+  text-align: left;
+}
+
+.tiptap-editor [style*="text-align: center"] {
+  text-align: center;
+}
+
+.tiptap-editor [style*="text-align: right"] {
+  text-align: right;
+}
+
+.tiptap-editor [style*="text-align: justify"] {
+  text-align: justify;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--vscode-scrollbarSlider-background);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--vscode-scrollbarSlider-hoverBackground);
+}

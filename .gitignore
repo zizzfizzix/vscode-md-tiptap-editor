@@ -1,0 +1,17 @@
+.DS_Store
+node_modules
+dist
+*.vsix
+.vscode-test
+
+# Webview build output
+webview/dist
+
+# OS files
+Thumbs.db
+*.log
+*.lock
+
+# Build outputs
+out/
+*.js.map

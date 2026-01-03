@@ -1,0 +1,59 @@
+.mermaid-node {
+  margin: 1em 0;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.mermaid-header {
+  background-color: var(--vscode-editor-selectionBackground);
+  padding: 0.5em 1em;
+  border-bottom: 1px solid var(--vscode-panel-border);
+}
+
+.mermaid-label {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: var(--vscode-editor-foreground);
+}
+
+.mermaid-editor {
+  display: none;
+}
+
+.mermaid-render {
+  padding: 1em;
+  text-align: center;
+  background-color: var(--vscode-editor-background);
+  overflow: auto;
+}
+
+.mermaid-render svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-error {
+  padding: 1em;
+  color: var(--vscode-errorForeground);
+  background-color: var(--vscode-inputValidation-errorBackground);
+  border: 1px solid var(--vscode-inputValidation-errorBorder);
+  margin: 1em;
+  border-radius: 3px;
+}
+
+/* Show editor when node is selected */
+.mermaid-node.ProseMirror-selectednode .mermaid-editor {
+  display: block;
+  background-color: var(--vscode-textCodeBlock-background);
+  padding: 0.75em 1em;
+}
+
+.mermaid-node.ProseMirror-selectednode .mermaid-editor pre {
+  margin: 0;
+  font-family: var(--vscode-editor-font-family);
+  color: var(--vscode-textPreformat-foreground);
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
