@@ -14,7 +14,7 @@ import { Subscript } from "@tiptap/extension-subscript"
 import { Superscript } from "@tiptap/extension-superscript"
 import { Underline } from "@tiptap/extension-underline"
 import { Table, TableRow, TableHeader, TableCell } from "@tiptap/extension-table"
-import { Markdown } from "tiptap-markdown"
+import { Markdown, type MarkdownStorage } from "tiptap-markdown"
 
 // --- Advanced Extensions ---
 import { CodeBlockShiki } from "./extensions/codeBlockShiki"
@@ -203,7 +203,10 @@ export function SimpleEditor() {
       }
 
       updateTimerRef.current = setTimeout(() => {
-        const content = editor.getHTML()
+        // TipTap extensions add storage properties dynamically at runtime.
+        // The tiptap-markdown extension adds 'markdown' to editor.storage.
+        const storage = editor.storage as unknown as { markdown: MarkdownStorage }
+        const content = storage.markdown.getMarkdown()
         vscode.postMessage({
           type: 'update',
           content: content,
