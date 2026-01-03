@@ -42,8 +42,6 @@ body {
   padding: 20px 40px;
   outline: none;
   min-height: 100%;
-  max-width: 900px;
-  margin: 0 auto;
   flex: 1;
 }
 
