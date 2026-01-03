@@ -20,7 +20,23 @@ export default defineConfig({
       output: {
         entryFileNames: 'assets/[name].js',
         chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]'
+        assetFileNames: 'assets/[name].[ext]',
+        manualChunks: (id) => {
+          // Split heavy dependencies into separate chunks for lazy loading
+          if (id.includes('node_modules/mermaid')) {
+            return 'vendor-mermaid'
+          }
+          if (id.includes('node_modules/katex')) {
+            return 'vendor-katex'
+          }
+          if (id.includes('node_modules/shiki')) {
+            return 'vendor-shiki'
+          }
+          // Keep other node_modules together
+          if (id.includes('node_modules')) {
+            return 'vendor'
+          }
+        }
       }
     }
   },

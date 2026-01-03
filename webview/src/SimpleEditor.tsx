@@ -22,14 +22,8 @@ import { MathInline, MathBlock } from "./extensions/math"
 import { Mermaid } from "./extensions/mermaid"
 import { ImageWithWebviewUri } from "./extensions/imageWithWebviewUri"
 
-// --- UI Primitives ---
-import { Button } from "@/components/tiptap-ui-primitive/button"
-import { Spacer } from "@/components/tiptap-ui-primitive/spacer"
-import {
-  Toolbar,
-  ToolbarGroup,
-  ToolbarSeparator,
-} from "@/components/tiptap-ui-primitive/toolbar"
+// --- Components ---
+import { EditorToolbar } from "@/components/EditorToolbar"
 
 // --- Tiptap Node Styles ---
 import "@/components/tiptap-node/blockquote-node/blockquote-node.scss"
@@ -38,117 +32,17 @@ import "@/components/tiptap-node/heading-node/heading-node.scss"
 import "@/components/tiptap-node/list-node/list-node.scss"
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss"
 
-// --- Tiptap UI ---
-import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu"
-import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu"
-import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button"
-import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button"
-import {
-  ColorHighlightPopover,
-  ColorHighlightPopoverContent,
-  ColorHighlightPopoverButton,
-} from "@/components/tiptap-ui/color-highlight-popover"
-import { MarkButton } from "@/components/tiptap-ui/mark-button"
-import { TextAlignButton } from "@/components/tiptap-ui/text-align-button"
-import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button"
-
 // --- Hooks ---
 import { useIsBreakpoint } from "@/hooks/use-is-breakpoint"
 import { useWindowSize } from "@/hooks/use-window-size"
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
 
-// --- Icons ---
-import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon"
-import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon"
-
 // VS Code API
 declare const acquireVsCodeApi: any
 const vscode = acquireVsCodeApi()
 
-const MainToolbarContent = ({
-  onHighlighterClick,
-  isMobile,
-}: {
-  onHighlighterClick: () => void
-  isMobile: boolean
-}) => {
-  return (
-    <>
-      <Spacer />
-
-      <ToolbarGroup>
-        <UndoRedoButton action="undo" />
-        <UndoRedoButton action="redo" />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={isMobile} />
-        <ListDropdownMenu
-          types={["bulletList", "orderedList", "taskList"]}
-          portal={isMobile}
-        />
-        <BlockquoteButton />
-        <CodeBlockButton />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <MarkButton type="bold" />
-        <MarkButton type="italic" />
-        <MarkButton type="strike" />
-        <MarkButton type="code" />
-        <MarkButton type="underline" />
-        {!isMobile ? (
-          <ColorHighlightPopover />
-        ) : (
-          <ColorHighlightPopoverButton onClick={onHighlighterClick} />
-        )}
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <MarkButton type="superscript" />
-        <MarkButton type="subscript" />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <TextAlignButton align="left" />
-        <TextAlignButton align="center" />
-        <TextAlignButton align="right" />
-        <TextAlignButton align="justify" />
-      </ToolbarGroup>
-
-      <Spacer />
-    </>
-  )
-}
-
-const MobileToolbarContent = ({
-  onBack,
-}: {
-  onBack: () => void
-}) => (
-  <>
-    <ToolbarGroup>
-      <Button data-style="ghost" onClick={onBack}>
-        <ArrowLeftIcon className="tiptap-button-icon" />
-        <HighlighterIcon className="tiptap-button-icon" />
-      </Button>
-    </ToolbarGroup>
-
-    <ToolbarSeparator />
-
-    <ColorHighlightPopoverContent />
-  </>
-)
-
 export function SimpleEditor() {
+  // Layout state (not editor-related, won't cause editor re-renders)
   const isMobile = useIsBreakpoint()
   const { height } = useWindowSize()
   const [mobileView, setMobileView] = useState<"main" | "highlighter">("main")
@@ -156,8 +50,10 @@ export function SimpleEditor() {
   const [isUpdatingFromVscode, setIsUpdatingFromVscode] = useState(false)
   const updateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // Create editor instance - isolated from layout state
   const editor = useEditor({
     immediatelyRender: false,
+    shouldRerenderOnTransaction: false, // Key performance optimization!
     editorProps: {
       attributes: {
         autocomplete: "off",
@@ -255,8 +151,12 @@ export function SimpleEditor() {
   return (
     <div className="simple-editor-wrapper">
       <EditorContext.Provider value={{ editor }}>
-        <Toolbar
+        <EditorToolbar
           ref={toolbarRef}
+          editor={editor}
+          isMobile={isMobile}
+          mobileView={mobileView}
+          onMobileViewChange={setMobileView}
           style={{
             ...(isMobile
               ? {
@@ -264,18 +164,7 @@ export function SimpleEditor() {
                 }
               : {}),
           }}
-        >
-          {mobileView === "main" ? (
-            <MainToolbarContent
-              onHighlighterClick={() => setMobileView("highlighter")}
-              isMobile={isMobile}
-            />
-          ) : (
-            <MobileToolbarContent
-              onBack={() => setMobileView("main")}
-            />
-          )}
-        </Toolbar>
+        />
 
         <EditorContent
           editor={editor}

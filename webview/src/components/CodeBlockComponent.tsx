@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { NodeViewWrapper, NodeViewContent, NodeViewProps } from '@tiptap/react'
-import { createHighlighter, type Highlighter } from 'shiki'
+import { shikiHighlighter } from '../lib/shiki-highlighter'
 import './CodeBlockComponent.css'
 
 // Common languages to support
@@ -13,36 +13,23 @@ const languages = [
 export const CodeBlockComponent = ({ node, updateAttributes }: NodeViewProps) => {
   const [language, setLanguage] = useState<string>(node.attrs.language || 'plaintext')
   const [highlightedCode, setHighlightedCode] = useState<string>('')
-  const highlighterRef = useRef<Highlighter | null>(null)
-
-  // Initialize Shiki highlighter
-  useEffect(() => {
-    const initHighlighter = async () => {
-      highlighterRef.current = await createHighlighter({
-        themes: ['dark-plus'],
-        langs: languages,
-      })
-      updateHighlight()
-    }
-    initHighlighter()
-  }, [])
 
   // Update highlight when content or language changes
   useEffect(() => {
     updateHighlight()
   }, [node.textContent, language])
 
-  const updateHighlight = () => {
-    if (!highlighterRef.current) return
+  const updateHighlight = async () => {
+    // Show content immediately without waiting
+    if (!highlightedCode && node.textContent) {
+      setHighlightedCode(`<pre><code>${node.textContent}</code></pre>`)
+    }
 
     try {
       const code = node.textContent || ''
       const lang = language || 'plaintext'
       
-      const html = highlighterRef.current.codeToHtml(code, {
-        lang: lang,
-        theme: 'dark-plus'
-      })
+      const html = await shikiHighlighter.highlightCode(code, lang)
       setHighlightedCode(html)
     } catch (error) {
       console.error('Error highlighting code:', error)

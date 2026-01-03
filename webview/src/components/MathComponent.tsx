@@ -1,8 +1,25 @@
 import { useEffect, useState } from 'react'
 import { NodeViewWrapper, NodeViewContent, NodeViewProps } from '@tiptap/react'
-import katex from 'katex'
-import 'katex/dist/katex.min.css'
 import './MathComponent.css'
+
+// Dynamic imports for heavy dependencies
+let katexLoaded = false
+let katexModule: any = null
+
+const loadKatex = async () => {
+  if (katexLoaded && katexModule) {
+    return katexModule
+  }
+  
+  const [katex, _] = await Promise.all([
+    import('katex'),
+    import('katex/dist/katex.min.css')
+  ])
+  
+  katexModule = katex.default
+  katexLoaded = true
+  return katexModule
+}
 
 export const MathComponent = ({ node }: NodeViewProps) => {
   const [renderedMath, setRenderedMath] = useState<string>('')
@@ -14,7 +31,7 @@ export const MathComponent = ({ node }: NodeViewProps) => {
     renderMath()
   }, [node.textContent])
 
-  const renderMath = () => {
+  const renderMath = async () => {
     try {
       setHasError(false)
       setErrorMessage('')
@@ -25,6 +42,7 @@ export const MathComponent = ({ node }: NodeViewProps) => {
         return
       }
 
+      const katex = await loadKatex()
       const html = katex.renderToString(latex, {
         displayMode: isBlock,
         throwOnError: true,
