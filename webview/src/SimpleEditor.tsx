@@ -166,6 +166,24 @@ export function SimpleEditor() {
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
   })
   
+  // Update CSS custom property for scroll-past-end
+  useEffect(() => {
+    const updateScrollPastEnd = () => {
+      const toolbarHeight = toolbarRef.current?.getBoundingClientRect().height ?? 0
+      const viewportHeight = window.innerHeight
+      // Calculate the padding needed: viewport height minus toolbar height minus one line (~60px)
+      const scrollPastEndHeight = Math.max(0, viewportHeight - toolbarHeight - 60)
+      document.documentElement.style.setProperty('--scroll-past-end-height', `${scrollPastEndHeight}px`)
+    }
+    
+    updateScrollPastEnd()
+    window.addEventListener('resize', updateScrollPastEnd)
+    
+    return () => {
+      window.removeEventListener('resize', updateScrollPastEnd)
+    }
+  }, [height]) // Re-run when window height changes
+  
   // Math dialog handlers
   const handleMathSave = (latex: string) => {
     if (editor && mathDialog.isOpen) {

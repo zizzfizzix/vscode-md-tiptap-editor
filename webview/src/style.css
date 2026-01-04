@@ -36,8 +36,6 @@ body {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
 /* Tiptap Editor Styles */
@@ -45,7 +43,13 @@ body {
   padding: 20px 40px;
   outline: none;
   min-height: 100%;
-  flex: 1;
+}
+
+/* Create scrollable space at the bottom using ::after pseudo-element */
+.tiptap-editor::after {
+  content: '';
+  display: block;
+  height: var(--scroll-past-end-height);
 }
 
 .tiptap-editor h1 {
