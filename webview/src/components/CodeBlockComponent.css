@@ -28,45 +28,50 @@
 }
 
 .code-block-content {
-  position: relative;
+  margin: 0;
+  padding: 0.75em 1em;
   background-color: var(--vscode-textCodeBlock-background);
   border: 1px solid var(--vscode-panel-border);
   border-radius: 0 0 5px 5px;
-  overflow: auto;
-}
-
-.code-block-content pre {
-  margin: 0;
-  padding: 0.75em 1em;
   font-family: var(--vscode-editor-font-family);
   font-size: 0.9em;
   line-height: 1.5;
-  color: transparent;
-  caret-color: var(--vscode-editor-foreground);
-  position: relative;
-  z-index: 2;
+  color: var(--vscode-editor-foreground);
+  overflow: auto;
+  white-space: pre;
+  tab-size: 2;
 }
 
-.highlighted-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.highlighted-overlay pre {
+.code-block-content [data-node-view-content] {
+  display: block;
   margin: 0;
-  padding: 0.75em 1em;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  white-space: inherit;
+  outline: none;
+}
+
+.code-block-content code {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  background: none;
+  padding: 0;
+}
+
+/* Shiki syntax highlighting token styles */
+.code-block-content .shiki {
   background: transparent !important;
 }
 
-.highlighted-overlay code {
-  font-family: var(--vscode-editor-font-family);
-  font-size: 0.9em;
-  line-height: 1.5;
+.code-block-content .shiki span {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }
+
 

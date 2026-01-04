@@ -19,6 +19,7 @@ import { CodeBlockShiki } from "./extensions/codeBlockShiki"
 import { MathInline, MathBlock } from "./extensions/math"
 import { Mermaid } from "./extensions/mermaid"
 import { ImageWithWebviewUri } from "./extensions/imageWithWebviewUri"
+import { getShikiHighlightPlugin } from "./lib/shiki-prosemirror-parser"
 
 // --- Components ---
 import { EditorToolbar } from "@/components/EditorToolbar"
@@ -114,6 +115,19 @@ export function SimpleEditor() {
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
   })
+
+  // Initialize Shiki syntax highlighting plugin
+  useEffect(() => {
+    if (!editor) return
+
+    // Add the Shiki highlight plugin asynchronously
+    getShikiHighlightPlugin().then(plugin => {
+      // Register the plugin with the editor's ProseMirror state
+      editor.registerPlugin(plugin)
+    }).catch(error => {
+      console.error('Failed to load syntax highlighting:', error)
+    })
+  }, [editor])
 
   useEffect(() => {
     if (!isMobile && mobileView !== "main") {

@@ -33,6 +33,7 @@
     "katex": "^0.16.27",
     "lodash.throttle": "^4.1.1",
     "mermaid": "^11.12.2",
+    "prosemirror-highlight": "^0.13.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hotkeys-hook": "^5.2.1",
