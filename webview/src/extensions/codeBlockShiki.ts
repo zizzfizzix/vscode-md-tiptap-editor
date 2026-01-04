@@ -29,15 +29,20 @@ export const CodeBlockShiki = Node.create<CodeBlockShikiOptions>({
     return {
       language: {
         default: null,
-        parseHTML: (element: HTMLElement) => element.getAttribute('data-language'),
-        renderHTML: (attributes: Record<string, any>) => {
-          if (!attributes.language) {
-            return {}
+        parseHTML: (element: HTMLElement) => {
+          // Extract language from code element's class (markdown-it format: class="language-xxx")
+          const code = element.querySelector('code')
+          if (code) {
+            const langClass = Array.from(code.classList).find(c => c.startsWith('language-'))
+            if (langClass) {
+              return langClass.replace('language-', '')
+            }
           }
-
-          return {
-            'data-language': attributes.language,
-          }
+          return null
+        },
+        renderHTML: () => {
+          // Don't render language as an attribute - it's handled in main renderHTML as a class
+          return {}
         },
       },
     }
@@ -52,8 +57,10 @@ export const CodeBlockShiki = Node.create<CodeBlockShikiOptions>({
     ]
   },
 
-  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, any> }) {
-    return ['pre', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), ['code', {}, 0]]
+  renderHTML({ node, HTMLAttributes }: { node: any; HTMLAttributes: Record<string, any> }) {
+    const language = node.attrs.language
+    const codeAttrs = language ? { class: `language-${language}` } : {}
+    return ['pre', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), ['code', codeAttrs, 0]]
   },
 
   addNodeView() {

@@ -17,6 +17,10 @@ export const Mermaid = Node.create<MermaidOptions>({
 
   code: true,
 
+  // Higher priority = checked first in parseHTML
+  // Must be > 100 (CodeBlockShiki's default) to match mermaid blocks first
+  priority: 150,
+
   addOptions() {
     return {
       HTMLAttributes: {},
@@ -42,6 +46,18 @@ export const Mermaid = Node.create<MermaidOptions>({
       {
         tag: 'div[data-type="mermaid"]',
       },
+      // Handle markdown-it parsed mermaid code blocks
+      {
+        tag: 'pre',
+        preserveWhitespace: 'full',
+        getAttrs: (node) => {
+          if (typeof node === 'string') return false
+          const code = node.querySelector('code')
+          if (!code) return false
+          // Check for language-mermaid class
+          return code.classList.contains('language-mermaid') ? {} : false
+        },
+      },
     ]
   },
 
@@ -52,5 +68,22 @@ export const Mermaid = Node.create<MermaidOptions>({
   addNodeView() {
     return ReactNodeViewRenderer(MermaidComponent)
   },
-})
 
+  // Add markdown serialization support for tiptap-markdown
+  addStorage() {
+    return {
+      markdown: {
+        serialize(state: any, node: any) {
+          state.write("```mermaid\n")
+          state.text(node.textContent, false)
+          state.ensureNewLine()
+          state.write("```")
+          state.closeBlock(node)
+        },
+        parse: {
+          // Parsing is handled by parseHTML rules above
+        },
+      },
+    }
+  },
+})
