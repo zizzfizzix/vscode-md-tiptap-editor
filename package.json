@@ -22,9 +22,34 @@
             "filenamePattern": "*.md"
           }
         ],
-        "priority": "default"
+        "priority": "option"
       }
-    ]
+    ],
+    "commands": [
+      {
+        "command": "tiptapMarkdown.openWith",
+        "title": "Open with Tiptap Markdown Editor"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "tiptapMarkdown.openWith",
+          "when": "resourceExtname == .md",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Tiptap Markdown Editor",
+      "properties": {
+        "tiptapMarkdownEditor.defaultForMarkdown": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use Tiptap as the default editor for Markdown files"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run build",
