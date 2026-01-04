@@ -6,7 +6,6 @@ import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
 import { TaskItem, TaskList } from "@tiptap/extension-list"
-import { TextAlign } from "@tiptap/extension-text-align"
 import { Typography } from "@tiptap/extension-typography"
 import { Highlight } from "@tiptap/extension-highlight"
 import { Subscript } from "@tiptap/extension-subscript"
@@ -122,7 +121,6 @@ export function SimpleEditor() {
       Mermaid,
       ImageWithWebviewUri, // Custom image extension (replaces standard Image)
       Markdown, // Includes Underline by default
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
       Table.configure({
         resizable: true,
       }),

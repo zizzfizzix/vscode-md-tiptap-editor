@@ -20,7 +20,6 @@ import {
   ColorHighlightPopoverButton,
 } from "@/components/tiptap-ui/color-highlight-popover"
 import { MarkButton } from "@/components/tiptap-ui/mark-button"
-import { TextAlignButton } from "@/components/tiptap-ui/text-align-button"
 import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button"
 
 import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon"
@@ -79,15 +78,6 @@ const MainToolbarContent = ({ onHighlighterClick, onInsertMath, isMobile }: Omit
       <ToolbarGroup>
         <MarkButton type="superscript" />
         <MarkButton type="subscript" />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <TextAlignButton align="left" />
-        <TextAlignButton align="center" />
-        <TextAlignButton align="right" />
-        <TextAlignButton align="justify" />
       </ToolbarGroup>
 
       <Spacer />
