@@ -19,9 +19,11 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { common, createLowlight } from 'lowlight'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { CodeBlockComponent } from './components/CodeBlockComponent'
-import { MathInline, MathBlock } from "./extensions/math"
+import { InlineMathWithMarkdown, BlockMathWithMarkdown } from './extensions/mathematicsWithMarkdown'
+import 'katex/dist/katex.min.css'
 import { Mermaid } from "./extensions/mermaid"
 import { ImageWithWebviewUri } from "./extensions/imageWithWebviewUri"
+import { MathEditDialog } from "./components/MathEditDialog"
 
 // --- Components ---
 import { EditorToolbar } from "@/components/EditorToolbar"
@@ -32,6 +34,7 @@ import "@/components/tiptap-node/code-block-node/code-block-node.scss"
 import "@/components/tiptap-node/heading-node/heading-node.scss"
 import "@/components/tiptap-node/list-node/list-node.scss"
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss"
+import "@/styles/math.css"
 
 // --- Hooks ---
 import { useIsBreakpoint } from "@/hooks/use-is-breakpoint"
@@ -59,6 +62,19 @@ export function SimpleEditor() {
   const toolbarRef = useRef<HTMLDivElement>(null)
   const [isUpdatingFromVscode, setIsUpdatingFromVscode] = useState(false)
   const updateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  
+  // Math dialog state
+  const [mathDialog, setMathDialog] = useState<{
+    isOpen: boolean
+    type: 'inline' | 'block'
+    latex: string
+    pos: number | null  // null means creating new, number means editing existing
+  }>({
+    isOpen: false,
+    type: 'inline',
+    latex: '',
+    pos: null,
+  })
 
   // Create editor instance - isolated from layout state
   const editor = useEditor({
@@ -77,8 +93,32 @@ export function SimpleEditor() {
         codeBlock: false, // We use custom CodeBlockLowlight
       }),
       CustomCodeBlock,
-      MathInline,
-      MathBlock,
+      InlineMathWithMarkdown.configure({
+        onClick: (node: any, pos: number) => {
+          setMathDialog({
+            isOpen: true,
+            type: 'inline',
+            latex: node.attrs.latex || '',
+            pos,
+          })
+        },
+        katexOptions: {
+          throwOnError: false,
+        },
+      }),
+      BlockMathWithMarkdown.configure({
+        onClick: (node: any, pos: number) => {
+          setMathDialog({
+            isOpen: true,
+            type: 'block',
+            latex: node.attrs.latex || '',
+            pos,
+          })
+        },
+        katexOptions: {
+          throwOnError: false,
+        },
+      }),
       Mermaid,
       ImageWithWebviewUri, // Custom image extension (replaces standard Image)
       Markdown, // Includes Underline by default
@@ -127,6 +167,43 @@ export function SimpleEditor() {
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
   })
+  
+  // Math dialog handlers
+  const handleMathSave = (latex: string) => {
+    if (editor && mathDialog.isOpen) {
+      if (mathDialog.pos === null) {
+        // Creating new math node
+        if (mathDialog.type === 'inline') {
+          editor.commands.insertInlineMath({ latex })
+        } else {
+          editor.commands.insertBlockMath({ latex })
+        }
+      } else {
+        // Updating existing math node
+        if (mathDialog.type === 'inline') {
+          editor.commands.updateInlineMath({ latex, pos: mathDialog.pos })
+        } else {
+          editor.commands.updateBlockMath({ latex, pos: mathDialog.pos })
+        }
+      }
+      editor.commands.focus()
+      setMathDialog({ ...mathDialog, isOpen: false })
+    }
+  }
+
+  const handleMathCancel = () => {
+    setMathDialog({ ...mathDialog, isOpen: false })
+  }
+  
+  // Function to open dialog for new math insertion
+  const openMathDialog = (type: 'inline' | 'block') => {
+    setMathDialog({
+      isOpen: true,
+      type,
+      latex: '',
+      pos: null,  // null indicates we're creating new
+    })
+  }
 
   useEffect(() => {
     if (!isMobile && mobileView !== "main") {
@@ -169,6 +246,7 @@ export function SimpleEditor() {
           isMobile={isMobile}
           mobileView={mobileView}
           onMobileViewChange={setMobileView}
+          onInsertMath={openMathDialog}
           style={{
             ...(isMobile
               ? {
@@ -182,6 +260,14 @@ export function SimpleEditor() {
           editor={editor}
           role="presentation"
           className="simple-editor-content"
+        />
+        
+        <MathEditDialog
+          isOpen={mathDialog.isOpen}
+          type={mathDialog.type}
+          initialLatex={mathDialog.latex}
+          onSave={handleMathSave}
+          onCancel={handleMathCancel}
         />
       </EditorContext.Provider>
     </div>

@@ -1,0 +1,217 @@
+.math-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.math-dialog {
+  background-color: var(--vscode-editor-background);
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 700px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.math-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+}
+
+.math-dialog-header h3 {
+  margin: 0;
+  color: var(--vscode-editor-foreground);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.math-dialog-close {
+  background: none;
+  border: none;
+  color: var(--vscode-editor-foreground);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.math-dialog-close:hover {
+  background-color: var(--vscode-toolbar-hoverBackground);
+}
+
+.math-dialog-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.math-dialog-section {
+  margin-bottom: 20px;
+}
+
+.math-dialog-section:last-child {
+  margin-bottom: 0;
+}
+
+.math-dialog-section label {
+  display: block;
+  color: var(--vscode-editor-foreground);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.math-dialog-textarea {
+  width: 100%;
+  background-color: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-family: var(--vscode-editor-font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+}
+
+.math-dialog-textarea:focus {
+  border-color: var(--vscode-focusBorder);
+  box-shadow: 0 0 0 1px var(--vscode-focusBorder);
+}
+
+.math-dialog-textarea::placeholder {
+  color: var(--vscode-input-placeholderForeground);
+}
+
+.math-dialog-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--vscode-descriptionForeground);
+  font-style: italic;
+}
+
+.math-dialog-preview {
+  background-color: var(--vscode-editor-background);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 4px;
+  padding: 20px;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.math-dialog-preview.block {
+  text-align: center;
+}
+
+.math-dialog-preview.inline {
+  justify-content: flex-start;
+}
+
+.math-preview-render {
+  color: var(--vscode-editor-foreground);
+  font-size: 1.1em;
+}
+
+.math-preview-error {
+  color: var(--vscode-errorForeground);
+  background-color: var(--vscode-inputValidation-errorBackground);
+  border: 1px solid var(--vscode-inputValidation-errorBorder);
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  width: 100%;
+}
+
+.math-preview-empty {
+  color: var(--vscode-descriptionForeground);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.math-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--vscode-panel-border);
+}
+
+.math-dialog-button {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.math-dialog-button-cancel {
+  background-color: transparent;
+  color: var(--vscode-button-secondaryForeground);
+  border-color: var(--vscode-button-secondaryBorder);
+}
+
+.math-dialog-button-cancel:hover {
+  background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.math-dialog-button-save {
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+.math-dialog-button-save:hover:not(:disabled) {
+  background-color: var(--vscode-button-hoverBackground);
+}
+
+.math-dialog-button-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

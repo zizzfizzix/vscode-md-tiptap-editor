@@ -13,6 +13,7 @@ import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-men
 import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu"
 import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button"
 import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button"
+import { MathButton } from "@/components/tiptap-ui/math-button"
 import {
   ColorHighlightPopover,
   ColorHighlightPopoverContent,
@@ -28,12 +29,13 @@ import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon"
 interface MainToolbarContentProps {
   editor: Editor | null
   onHighlighterClick: () => void
+  onInsertMath: (type: 'inline' | 'block') => void
   isMobile: boolean
 }
 
 // Simplified: just render toolbar normally
 // The buttons themselves use EditorContext and will handle null editor
-const MainToolbarContent = ({ onHighlighterClick, isMobile }: Omit<MainToolbarContentProps, 'editor'>) => {
+const MainToolbarContent = ({ onHighlighterClick, onInsertMath, isMobile }: Omit<MainToolbarContentProps, 'editor'>) => {
   return (
     <>
       <Spacer />
@@ -53,6 +55,8 @@ const MainToolbarContent = ({ onHighlighterClick, isMobile }: Omit<MainToolbarCo
         />
         <BlockquoteButton />
         <CodeBlockButton />
+        <MathButton type="inline" onInsert={onInsertMath} />
+        <MathButton type="block" onInsert={onInsertMath} />
       </ToolbarGroup>
 
       <ToolbarSeparator />
@@ -115,6 +119,7 @@ interface EditorToolbarProps {
   isMobile: boolean
   mobileView: "main" | "highlighter"
   onMobileViewChange: (view: "main" | "highlighter") => void
+  onInsertMath: (type: 'inline' | 'block') => void
   style?: React.CSSProperties
 }
 
@@ -122,6 +127,7 @@ export const EditorToolbar = forwardRef<HTMLDivElement, EditorToolbarProps>(({
   isMobile, 
   mobileView, 
   onMobileViewChange,
+  onInsertMath,
   style 
 }, ref) => {
   return (
@@ -129,6 +135,7 @@ export const EditorToolbar = forwardRef<HTMLDivElement, EditorToolbarProps>(({
       {mobileView === "main" ? (
         <MainToolbarContent
           onHighlighterClick={() => onMobileViewChange("highlighter")}
+          onInsertMath={onInsertMath}
           isMobile={isMobile}
         />
       ) : (

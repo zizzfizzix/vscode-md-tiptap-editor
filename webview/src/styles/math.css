@@ -1,0 +1,85 @@
+/* Official Tiptap Mathematics Extension Styles */
+
+/* Base rendered math node */
+.tiptap-mathematics-render {
+  color: var(--vscode-editor-foreground);
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.tiptap-mathematics-render:hover {
+  background-color: var(--vscode-editor-hoverHighlightBackground);
+  border-radius: 3px;
+}
+
+/* Editable math nodes */
+.tiptap-mathematics-render--editable {
+  background-color: var(--vscode-input-background);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 3px;
+  padding: 0.25em 0.5em;
+}
+
+.tiptap-mathematics-render--editable:focus {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: 1px;
+}
+
+/* Inline math nodes */
+.tiptap-mathematics-render[data-type="inline-math"] {
+  display: inline-block;
+  margin: 0 0.2em;
+  vertical-align: middle;
+  padding: 0.1em 0.3em;
+}
+
+.tiptap-mathematics-render[data-type="inline-math"]:hover {
+  padding: 0.1em 0.3em;
+}
+
+/* Block math nodes */
+.tiptap-mathematics-render[data-type="block-math"] {
+  display: block;
+  margin: 1em 0;
+  text-align: center;
+  padding: 1em;
+}
+
+.tiptap-mathematics-render[data-type="block-math"]:hover {
+  padding: 1em;
+}
+
+/* KaTeX styling adjustments */
+.tiptap-mathematics-render .katex {
+  font-size: 1.1em;
+  color: inherit;
+}
+
+.tiptap-mathematics-render .katex-display {
+  margin: 0;
+}
+
+/* Selected state */
+.ProseMirror-selectednode.tiptap-mathematics-render {
+  background-color: var(--vscode-editor-selectionBackground);
+  border: 1px solid var(--vscode-focusBorder);
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: 1px;
+}
+
+/* Error state for invalid LaTeX */
+.tiptap-mathematics-render.has-error {
+  background-color: var(--vscode-inputValidation-errorBackground);
+  border: 1px solid var(--vscode-inputValidation-errorBorder);
+  color: var(--vscode-errorForeground);
+}
+
+/* Empty math node placeholder */
+.tiptap-mathematics-render:empty::before {
+  content: 'Click to edit math';
+  color: var(--vscode-input-placeholderForeground);
+  font-style: italic;
+  font-size: 0.9em;
+}
+
