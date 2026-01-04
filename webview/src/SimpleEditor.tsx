@@ -15,11 +15,13 @@ import { Table, TableRow, TableHeader, TableCell } from "@tiptap/extension-table
 import { Markdown, type MarkdownStorage } from "tiptap-markdown"
 
 // --- Advanced Extensions ---
-import { CodeBlockShiki } from "./extensions/codeBlockShiki"
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import { common, createLowlight } from 'lowlight'
+import { ReactNodeViewRenderer } from '@tiptap/react'
+import { CodeBlockComponent } from './components/CodeBlockComponent'
 import { MathInline, MathBlock } from "./extensions/math"
 import { Mermaid } from "./extensions/mermaid"
 import { ImageWithWebviewUri } from "./extensions/imageWithWebviewUri"
-import { getShikiHighlightPlugin } from "./lib/shiki-prosemirror-parser"
 
 // --- Components ---
 import { EditorToolbar } from "@/components/EditorToolbar"
@@ -38,6 +40,16 @@ import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
 
 // VS Code API singleton
 import { vscodeApi as vscode } from "@/lib/vscode-api"
+
+// Create lowlight instance
+const lowlight = createLowlight(common)
+
+// Create custom CodeBlock extension with NodeView
+const CustomCodeBlock = CodeBlockLowlight.extend({
+  addNodeView() {
+    return ReactNodeViewRenderer(CodeBlockComponent)
+  },
+}).configure({ lowlight })
 
 export function SimpleEditor() {
   // Layout state (not editor-related, won't cause editor re-renders)
@@ -62,9 +74,9 @@ export function SimpleEditor() {
     },
     extensions: [
       StarterKit.configure({
-        codeBlock: false, // We use custom CodeBlockShiki
+        codeBlock: false, // We use custom CodeBlockLowlight
       }),
-      CodeBlockShiki,
+      CustomCodeBlock,
       MathInline,
       MathBlock,
       Mermaid,
@@ -115,19 +127,6 @@ export function SimpleEditor() {
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
   })
-
-  // Initialize Shiki syntax highlighting plugin
-  useEffect(() => {
-    if (!editor) return
-
-    // Add the Shiki highlight plugin asynchronously
-    getShikiHighlightPlugin().then(plugin => {
-      // Register the plugin with the editor's ProseMirror state
-      editor.registerPlugin(plugin)
-    }).catch(error => {
-      console.error('Failed to load syntax highlighting:', error)
-    })
-  }, [editor])
 
   useEffect(() => {
     if (!isMobile && mobileView !== "main") {

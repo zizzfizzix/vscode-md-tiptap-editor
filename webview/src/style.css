@@ -1,6 +1,9 @@
 /* Import VS Code theme variables */
 @import './styles/_variables.scss';
 
+/* Import syntax highlighting theme */
+@import './styles/syntax-highlight.css';
+
 /* Reset and base styles */
 *, *::before, *::after {
   box-sizing: border-box;

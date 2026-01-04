@@ -1,0 +1,97 @@
+/* Light theme (default) - GitHub Light */
+@import 'highlight.js/styles/github.css';
+
+/* Dark theme override - GitHub Dark */
+body.vscode-dark .hljs {
+  background: #0d1117;
+  color: #c9d1d9;
+}
+
+body.vscode-dark .hljs-doctag,
+body.vscode-dark .hljs-keyword,
+body.vscode-dark .hljs-meta .hljs-keyword,
+body.vscode-dark .hljs-template-tag,
+body.vscode-dark .hljs-template-variable,
+body.vscode-dark .hljs-type,
+body.vscode-dark .hljs-variable.language_ {
+  color: #ff7b72;
+}
+
+body.vscode-dark .hljs-title,
+body.vscode-dark .hljs-title.class_,
+body.vscode-dark .hljs-title.class_.inherited__,
+body.vscode-dark .hljs-title.function_ {
+  color: #d2a8ff;
+}
+
+body.vscode-dark .hljs-attr,
+body.vscode-dark .hljs-attribute,
+body.vscode-dark .hljs-literal,
+body.vscode-dark .hljs-meta,
+body.vscode-dark .hljs-number,
+body.vscode-dark .hljs-operator,
+body.vscode-dark .hljs-selector-attr,
+body.vscode-dark .hljs-selector-class,
+body.vscode-dark .hljs-selector-id,
+body.vscode-dark .hljs-variable {
+  color: #79c0ff;
+}
+
+body.vscode-dark .hljs-string,
+body.vscode-dark .hljs-meta .hljs-string,
+body.vscode-dark .hljs-regexp {
+  color: #a5d6ff;
+}
+
+body.vscode-dark .hljs-built_in,
+body.vscode-dark .hljs-symbol {
+  color: #ffa657;
+}
+
+body.vscode-dark .hljs-code,
+body.vscode-dark .hljs-comment,
+body.vscode-dark .hljs-formula {
+  color: #8b949e;
+  font-style: italic;
+}
+
+body.vscode-dark .hljs-name,
+body.vscode-dark .hljs-quote,
+body.vscode-dark .hljs-selector-pseudo,
+body.vscode-dark .hljs-selector-tag {
+  color: #7ee787;
+}
+
+body.vscode-dark .hljs-subst {
+  color: #c9d1d9;
+}
+
+body.vscode-dark .hljs-section {
+  color: #1f6feb;
+  font-weight: bold;
+}
+
+body.vscode-dark .hljs-bullet {
+  color: #f2cc60;
+}
+
+body.vscode-dark .hljs-emphasis {
+  color: #c9d1d9;
+  font-style: italic;
+}
+
+body.vscode-dark .hljs-strong {
+  color: #c9d1d9;
+  font-weight: bold;
+}
+
+body.vscode-dark .hljs-addition {
+  color: #aff5b4;
+  background-color: #033a16;
+}
+
+body.vscode-dark .hljs-deletion {
+  color: #ffdcd7;
+  background-color: #67060c;
+}
+

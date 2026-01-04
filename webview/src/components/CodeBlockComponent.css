@@ -1,77 +1,41 @@
 .code-block {
   position: relative;
-  margin: 1em 0;
 }
 
-.code-block-header {
-  display: flex;
-  justify-content: flex-end;
-  background-color: var(--vscode-textCodeBlock-background);
-  border: 1px solid var(--vscode-panel-border);
-  border-bottom: none;
-  padding: 0.25em 0.5em;
-  border-radius: 5px 5px 0 0;
-}
-
-.language-select {
+.code-block select {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
   background-color: var(--vscode-dropdown-background);
   color: var(--vscode-dropdown-foreground);
   border: 1px solid var(--vscode-dropdown-border);
-  padding: 0.2em 0.5em;
+  padding: 0.25rem 0.5rem;
   border-radius: 3px;
-  font-size: 0.85em;
+  font-size: 0.75rem;
   cursor: pointer;
 }
 
-.language-select:hover {
+.code-block select:hover {
   background-color: var(--vscode-dropdown-listBackground);
 }
 
-.code-block-content {
+.code-block pre {
   margin: 0;
-  padding: 0.75em 1em;
+  padding: 1rem;
   background-color: var(--vscode-textCodeBlock-background);
   border: 1px solid var(--vscode-panel-border);
-  border-radius: 0 0 5px 5px;
+  border-radius: 5px;
+  overflow: auto;
+}
+
+.code-block pre code {
+  display: block;
   font-family: var(--vscode-editor-font-family);
   font-size: 0.9em;
   line-height: 1.5;
   color: var(--vscode-editor-foreground);
-  overflow: auto;
   white-space: pre;
-  tab-size: 2;
-}
-
-.code-block-content [data-node-view-content] {
-  display: block;
-  margin: 0;
-  padding: 0;
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  color: inherit;
-  white-space: inherit;
-  outline: none;
-}
-
-.code-block-content code {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  color: inherit;
   background: none;
   padding: 0;
 }
-
-/* Shiki syntax highlighting token styles */
-.code-block-content .shiki {
-  background: transparent !important;
-}
-
-.code-block-content .shiki span {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-}
-
-
