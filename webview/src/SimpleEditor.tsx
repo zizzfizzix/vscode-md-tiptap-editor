@@ -236,7 +236,13 @@ export function SimpleEditor() {
         case 'init':
           if (editor) {
             setIsUpdatingFromVscode(true)
-            editor.commands.setContent(message.content)
+            
+            // Use chain with explicit meta to prevent adding to history
+            editor.chain()
+              .setMeta('addToHistory', false)
+              .setContent(message.content)
+              .run()
+            
             setIsUpdatingFromVscode(false)
           }
           break
